@@ -1,5 +1,5 @@
 ^xs/.*\.c$
-^xs/.*\.o$
+\.o$
 ^_darcs
 \bblib
 ^Makefile$

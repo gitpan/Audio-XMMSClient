@@ -19,11 +19,21 @@ MODULE = Audio::XMMSClient	PACKAGE = Audio::XMMSClient	PREFIX = xmmsc_
 
 ## General
 
-xmmsc_connection_t*
+SV*
 new(class, clientname)
+		const char* class
 		const char* clientname
+	PREINIT:
+		xmmsc_connection_t* con;
 	CODE:
-		RETVAL = xmmsc_init(clientname);
+		con = xmmsc_init(clientname);
+
+		if (con == NULL) {
+			RETVAL = &PL_sv_undef;
+		}
+		else {
+			RETVAL = perl_xmmsclient_new_sv_from_ptr(con, class);
+		}
 	OUTPUT:
 		RETVAL
 
@@ -592,9 +602,6 @@ DESTROY(c)
 		xmmsc_unref(c);
 
 BOOT:
-	EXTERN_C XS(boot_Audio__XMMSClient__Result);
-	EXTERN_C XS(boot_Audio__XMMSClient__Result__PropDict);
-	EXTERN_C XS(boot_Audio__XMMSClient__Result__PropDict__Tie);
-	perl_xmmsclient_call_xs(aTHX_ boot_Audio__XMMSClient__Result, cv, mark);
-	perl_xmmsclient_call_xs(aTHX_ boot_Audio__XMMSClient__Result__PropDict, cv, mark);
-	perl_xmmsclient_call_xs(aTHX_ boot_Audio__XMMSClient__Result__PropDict__Tie, cv, mark);
+	PERL_XMMSCLIENT_CALL_BOOT(boot_Audio__XMMSClient__Result);
+	PERL_XMMSCLIENT_CALL_BOOT(boot_Audio__XMMSClient__Result__PropDict);
+	PERL_XMMSCLIENT_CALL_BOOT(boot_Audio__XMMSClient__Result__PropDict__Tie);

@@ -8,13 +8,13 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 perl_glue/perl_xmmsclient.c
 perl_glue/perl_xmmsclient.h
-perl_glue/perl_xmmsclient.o
 perl_glue/ppport.h
 pm/XMMSClient.pm
 pm/XMMSClient/Glib.pm
-pm/XMMSClient/Result.pm
 t/00_use.t
 t/01_pod.t
+t/05_api_coverage.t
+t/lib/Test/XMMS2.pm
 tutorial/tut1.pl
 tutorial/tut2.pl
 tutorial/tut3.pl

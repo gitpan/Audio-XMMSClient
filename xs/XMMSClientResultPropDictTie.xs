@@ -109,6 +109,6 @@ FETCH(res, key)
 		}
 
 		if (ret != 1)
-			croak("Audio::XMMSClient::Result::PropDict::Tie::FETCH failed. Please report a bug");
+			RETVAL = &PL_sv_undef;
 	OUTPUT:
 		RETVAL

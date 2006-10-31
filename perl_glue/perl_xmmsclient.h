@@ -10,6 +10,12 @@
 
 #include <xmmsclient/xmmsclient.h>
 
+#define PERL_XMMSCLIENT_CALL_BOOT(name) \
+	{ \
+		EXTERN_C XS(name); \
+		_perl_xmmsclient_call_xs (aTHX_ name, cv, mark); \
+	}
+
 #ifdef PERL_IMPLICIT_CONTEXT
 
 #define dPERL_XMMS_CLIENT_CALLBACK_MARSHAL_SP \
@@ -46,7 +52,7 @@ struct _PerlXMMSClientCallback {
 	void* priv;
 };
 
-void perl_xmmsclient_call_xs(pTHX_ void (*subaddr) (pTHX_ CV* cv), CV* cv, SV** mark);
+void _perl_xmmsclient_call_xs(pTHX_ void (*subaddr) (pTHX_ CV* cv), CV* cv, SV** mark);
 
 SV* perl_xmmsclient_new_sv_from_ptr(void* con, const char* class);
 

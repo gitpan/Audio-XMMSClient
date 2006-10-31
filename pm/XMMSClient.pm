@@ -5,9 +5,8 @@ use warnings;
 use Carp;
 use IO::Handle;
 use IO::Select;
-use Audio::XMMSClient::Result;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 our @ISA;
 
 eval {
@@ -70,7 +69,7 @@ sub request {
     my ($self, $func, $callback, $user_data) = @_;
 
     if (!$self->can($func)) {
-        Carp::croak( "Invalid signal name `${func}' given" );
+        Carp::croak( "Invalid request name `${func}' given" );
     }
 
     my $result = $self->$func;

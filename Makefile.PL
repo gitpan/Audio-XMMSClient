@@ -13,12 +13,10 @@ WriteMakefile(
 		MAN3PODS		=> {
 			'pm/XMMSClient.pm'	                => '$(INST_MAN3DIR)/Audio::XMMSClient.$(MAN3EXT)',
 			'pm/XMMSClient/Glib.pm'	            => '$(INST_MAN3DIR)/Audio::XMMSClient::Glib.$(MAN3EXT)',
-			'pm/XMMSClient/Result.pm'           => '$(INST_MAN3DIR)/Audio::XMMSClient::Result.$(MAN3EXT)',
 		},
 		PM				=> {
 			'pm/XMMSClient.pm'	                => '$(INST_LIBDIR)/XMMSClient.pm',
 			'pm/XMMSClient/Glib.pm'	            => '$(INST_LIBDIR)/XMMSClient/Glib.pm',
-			'pm/XMMSClient/Result.pm'           => '$(INST_LIBDIR)/XMMSClient/Result.pm',
 		},
 		INC				=> '-Wall -Werror -Iperl_glue '.$pkg_info{cflags},
 		LIBS			=> $pkg_info{libs},

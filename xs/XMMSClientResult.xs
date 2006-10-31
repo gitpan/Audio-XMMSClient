@@ -196,6 +196,11 @@ xmmsc_result_notifier_set(res, func, data=NULL)
 		PerlXMMSClientCallbackParamType param_types[1];
 		xmmsc_result_t* c_res;
 	CODE:
+		/*
+		 * TODO: free the PerlXMMSClientCallback if it is already set. The
+		 * current xmmsclient API doesn't allow that, though.
+		 */
+
 		c_res = (xmmsc_result_t*)perl_xmmsclient_get_ptr_from_sv(res, "Audio::XMMSClient::Result");
 		param_types[0] = PERL_XMMSCLIENT_CALLBACK_PARAM_TYPE_RESULT;
 		

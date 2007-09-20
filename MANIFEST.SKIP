@@ -7,3 +7,6 @@
 \.bs$
 ^pm_to_blib$
 ^Audio-XMMSClient-
+^\.git
+\.old$
+XMMSClient.*\.c

@@ -8,7 +8,7 @@ my %pkg_info = ExtUtils::PkgConfig->find('xmms2-client');
 WriteMakefile(
 		NAME			=> 'Audio::XMMSClient',
 		VERSION_FROM	=> 'pm/XMMSClient.pm',
-		ABSTRACT_FROM	=> 'pm/XMMSClient.pm',
+		ABSTRACT     	=> 'Interface to the xmms2 music player',
 		XSPROTOARG		=> '-noprototypes',
 		MAN3PODS		=> {
 			'pm/XMMSClient.pm'	                => '$(INST_MAN3DIR)/Audio::XMMSClient.$(MAN3EXT)',
@@ -18,14 +18,14 @@ WriteMakefile(
 			'pm/XMMSClient.pm'	                => '$(INST_LIBDIR)/XMMSClient.pm',
 			'pm/XMMSClient/Glib.pm'	            => '$(INST_LIBDIR)/XMMSClient/Glib.pm',
 		},
-		INC				=> '-Wall -Werror -Iperl_glue '.$pkg_info{cflags},
+		INC				=> '-Wall -Werror -I. '.$pkg_info{cflags},
 		LIBS			=> $pkg_info{libs},
 		do {
 			my @clean;
 			my @OBJECT;
 			my %XS;
 
-			for my $xs (<xs/*.xs>) {
+			for my $xs (<*.xs>) {
 				(my $c = $xs) =~ s/\.xs$/\.c/i;
 				(my $o = $xs) =~ s/\.xs$/\$(OBJ_EXT)/i;
 
@@ -34,7 +34,7 @@ WriteMakefile(
 				push @clean, $o;
 			}
 
-			for my $c (<perl_glue/*.c>) {
+			for my $c (<perl_xmmsclient*.c>) {
 				(my $o = $c) =~ s/\.c/\$(OBJ_EXT)/i;
 
 				push @OBJECT, $o;
@@ -52,18 +52,17 @@ package MY;
 
 use strict;
 use warnings;
-use Config;
 
-sub const_cccmd {
-	my $inherited = shift->SUPER::const_cccmd(@_);
-	return '' unless $inherited;
+sub postamble {
+    return <<"EOP"
+PODS = XMMSClient.pod XMMSClientResult.pod XMMSClientPlaylist.pod
 
-	if ($Config{cc} eq 'cl') {
-		warn 'you are using MSVC... my condolences.';
-		$inherited .= ' /Fo$@';
-	} else {
-		$inherited .= ' -o $@';
-	}
+.xs.pod :
+\tperldoc -u \$< > \$@
 
-	return $inherited;
+docs: \$(PODS)
+\t\$(PERL) -e'for my \$\$pod (qw{\$^}) { (my \$\$new_name = \$\$pod) =~ s!(XMMSClient)([^\\.]+)!\$\$1/\$\$2!; rename \$\$pod, "pm/\$\$new_name" }'
+
+.SUFFIXES: .pod
+EOP
 }

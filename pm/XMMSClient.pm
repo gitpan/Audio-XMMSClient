@@ -5,8 +5,9 @@ use warnings;
 use Carp;
 use IO::Handle;
 use IO::Select;
+use Audio::XMMSClient::Collection;
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 our @ISA;
 
 eval {
@@ -66,53 +67,20 @@ sub quit_loop {
 }
 
 sub request {
-    my ($self, $func, $callback, $user_data) = @_;
+    my $self = shift;
+    my $func = shift;
+
+    my $user_data = pop;
+    my $callback  = pop;
 
     if (!$self->can($func)) {
         Carp::croak( "Invalid request name `${func}' given" );
     }
 
-    my $result = $self->$func;
+    my $result = $self->$func( @_ );
     $result->notifier_set($callback, $user_data);
 
     return $result;
 }
 
 1;
-
-=pod
-
-=head1 NAME
-
-Audio::XMMSClient - Interface to the xmms2 music player
-
-=head1 SYNOPSIS
-
-  use Audio::XMMSClient;
-
-  $c = Audio::XMMSClient->new( $name );
-  $c->connect;
-
-  my $r = $c->playback_status;
-  $r->wait;
-  print $r->value;
-
-=head1 DESCRIPTION
-
-This module provides a perl interface to the xmms2 client library. It currently
-lacks a good documentation, but the 'turorial' directory provides some nice and
-well explained examples to get you started for now.
-
-=head1 AUTHOR
-
-Florian Ragwitz <rafl@debian.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2006, Florian Ragwitz
-
-This library is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself, either Perl version 5.8.8 or, at your option,
-any later version of Perl 5 you may have available.
-
-=cut
